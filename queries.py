@@ -1,7 +1,7 @@
 import psycopg2
 
-# connect_str = "dbname='andras' user='andras' host='localhost' password='andras'"
-connect_str = "dbname='apha' user='apha' host='localhost' password='AndrasKovacs84'"
+connect_str = "dbname='andras' user='andras' host='localhost' password='andras'"
+# connect_str = "dbname='apha' user='apha' host='localhost' password='AndrasKovacs84'"
 conn = psycopg2.connect(connect_str)
 conn.autocommit = True
 cursor = conn.cursor()
@@ -80,12 +80,17 @@ def new_applicant_insert_select():
     After INSERTing the data, write a SELECT query, that returns with all the columns of this applicant!
     (use the unique application code for your condition!)'''
     data = []
-    cursor.execute("""
-                   INSERT INTO applicants
-                   (first_name, last_name, phone_number, email, application_code)
-                   VALUES
-                   ('Markus', 'Schaffarzyk', '003620/725-2666', 'djnovus@groovecoverage.com', 54823 )
-                   """)
+
+    try:
+        cursor.execute("""
+                       INSERT INTO applicants
+                       (first_name, last_name, phone_number, email, application_code)
+                       VALUES
+                       ('Markus', 'Schaffarzyk', '003620/725-2666', 'djnovus@groovecoverage.com', 54823 )
+                       """)
+    except psycopg2.IntegrityError as err:
+        print(err)
+
     cursor.execute("""
                    SELECT *
                    FROM applicants
