@@ -1,0 +1,17 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>Available queries</title>
+    </head>
+    <body>
+        <form>
+            <table>
+            {% for entry in menu_options %}
+                <tr>
+                    <td><button type="button" onclick="location.href='/queries/{{ entry.query }}'" >{{ entry.option_name }}</button></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </form>
+    </body>
+</html>

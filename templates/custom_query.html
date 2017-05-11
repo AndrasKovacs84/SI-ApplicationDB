@@ -1,0 +1,52 @@
+<!DOCTYPE>
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>Query attributes</th>
+                <th>Chosen option</th>
+            </tr>
+            <tr>
+                <td>Database table</td>
+                <td>{{ query.table }}</td>
+            </tr>
+            <tr>
+                <td>Columns to display</td>
+                <td>{{ query.columns }}</td>                
+            </tr>
+            <tr>
+                <td>Filter results by</td>
+                <td>{{ query.filter }}</td>                
+            </tr>
+            <tr>
+                <td>Sort results by</td>
+                <td>{{ query.order_by }}</td>                
+            </tr>
+
+        </table>
+        <form action="/custom_query" method={{query.method}} >
+            {% if query.table == None %}
+                <label for="table">Choose which table to search: </label>
+                <select name="table">
+                    <option value="mentors">Mentors</option>
+                    <option value="applicants">Applicants</option>
+                </select>
+            {% else %}
+                {% if query.columns == None and query.table == 'mentors' %}
+                    <input type="checkbox" name="columns" value="id">Mentor id</br>
+                    <input type="checkbox" name="columns" value="first_name">First name</br>
+                    <input type="checkbox" name="columns" value="last_name">Last name</br>
+                    <input type="checkbox" name="columns" value="nick_name">Nickname</br>
+                    <input type="checkbox" name="columns" value="phone_number">Phone number</br>
+                    <input type="checkbox" name="columns" value="email">email</br>
+                    <input type="checkbox" name="columns" value="city">City</br>
+                    <input type="checkbox" name="columns" value="favourite_number">Favourite number</br>
+                {% endif %}
+            {% endif %}
+            <input type="submit" name="submit" value="Submit">
+        </form>
+    </body>
+</html>
