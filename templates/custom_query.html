@@ -26,8 +26,8 @@
                 <td>{{ query.order_by }}</td>                
             </tr>
 
-        </table>
-        <form action="/custom_query" method={{query.method}} >
+        </table></br>
+        <form action="/queries/custom_query" method={{query.method}} >
             {% if query.table == None %}
                 <label for="table">Choose which table to search: </label>
                 <select name="table">
@@ -36,6 +36,7 @@
                 </select>
             {% else %}
                 {% if query.columns == None and query.table == 'mentors' %}
+                    <label for="columns">Choose at least 1 column to display:</label></br>
                     <input type="checkbox" name="columns" value="id">Mentor id</br>
                     <input type="checkbox" name="columns" value="first_name">First name</br>
                     <input type="checkbox" name="columns" value="last_name">Last name</br>
@@ -44,8 +45,17 @@
                     <input type="checkbox" name="columns" value="email">email</br>
                     <input type="checkbox" name="columns" value="city">City</br>
                     <input type="checkbox" name="columns" value="favourite_number">Favourite number</br>
+                {% elif query.columns == None and query.table == 'applicants' %}
+                    <label for="columns">Choose at least 1 column to display</label></br>
+                    <input type="checkbox" name="columns" value="id">Applicant id</br>
+                    <input type="checkbox" name="columns" value="first_name">First name</br>
+                    <input type="checkbox" name="columns" value="last_name">Last name</br>
+                    <input type="checkbox" name="columns" value="phone_number">Phone number</br>
+                    <input type="checkbox" name="columns" value="email">email</br>
+                    <input type="checkbox" name="columns" value="application_code">Application code</br>
                 {% else %}
                     {% if query.filter == None and query.table == 'mentors' %}
+                    <label for="column_to_search">Pick which column to search in:</label></br>
                     <input type="radio" name="column_to_search" value="id">Mentor id
                     <input type="radio" name="column_to_search" value="first_name">First name
                     <input type="radio" name="column_to_search" value="last_name">Last name
@@ -54,21 +64,44 @@
                     <input type="radio" name="column_to_search" value="email">email
                     <input type="radio" name="column_to_search" value="city">City
                     <input type="radio" name="column_to_search" value="favourite_number">Favourite number</br>
+                    </br><label for="search_pos">Choose option for matching:</label></br>
                     <input type="radio" name="search_pos" value="start">Starts with
                     <input type="radio" name="search_pos" value="mid">Contains anywhere
-                    <input type="radio" name="search_pos" value="end">Ends with<br>
+                    <input type="radio" name="search_pos" value="end">Ends with
+                    <input type="radio" name="search_pos" value="exact">Exact match<br>
+                    </br><label for="keyword">Type in keyword to look for:</label></br>
+                    <input type="text" name="keyword" value="">
+                    {% elif query.filter == None and query.table == 'applicants' %}
+                    <label for="column_to_search">Pick which column to search in:</label></br>
+                    <input type="radio" name="column_to_search" value="id">Applicant id
+                    <input type="radio" name="column_to_search" value="first_name">First name
+                    <input type="radio" name="column_to_search" value="last_name">Last name
+                    <input type="radio" name="column_to_search" value="phone_number">Phone number
+                    <input type="radio" name="column_to_search" value="email">email
+                    <input type="radio" name="column_to_search" value="application_code">Application code</br>
+                    </br><label for="search_pos">Choose option for matching:</label></br>
+                    <input type="radio" name="search_pos" value="start">Starts with
+                    <input type="radio" name="search_pos" value="mid">Contains anywhere
+                    <input type="radio" name="search_pos" value="end">Ends with
+                    <input type="radio" name="search_pos" value="exact">Exact match<br>
+                    </br><label for="keyword">Type in keyword to look for:</label></br>
                     <input type="text" name="keyword" value="">
                     {% else %}
-                        {% if order_by == None and query.table == 'mentors' %}
-                            something
+                        {% if query.order_by == None %}
+                            <label for="column_to_order_by">Output ordered by: </label></br>
                             {% for column in query.columns %}
                             <input type="radio" name="column_to_order_by" value={{ column }}>{{ column }}
                             {% endfor %}
+                            </br>
+                            </br><label for="sort_order">Sorting order</label></br>
+                            <input type="radio" name="sort_order" value="asc">Ascending order<br>
+                            <input type="radio" name="sort_order" value="desc">Descending order<br>
                         {% endif %}
                     {% endif %}
                 {% endif %}
             {% endif %}
             <input type="submit" name="submit" value="Submit">
+            <button type="button" onclick="location.href='/'" >Back to query index</button>
         </form>
     </body>
 </html>
