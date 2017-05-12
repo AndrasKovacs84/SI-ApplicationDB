@@ -49,6 +49,7 @@ def custom_query():
              'method': 'GET'}
 
     query = helpers.read_qry_from_cookies()
+    print(query['columns'])
 
     if request.args.get('table') is not None:
         query['table'] = request.args.get('table')
@@ -60,6 +61,21 @@ def custom_query():
         query['columns'] = ', '.join(request.args.getlist('columns'))
         response = make_response(redirect('/custom_query'))
         response.set_cookie('columns', query['columns'])
+        return response
+
+    if request.args.get('column_to_search') is not None:
+        if request.args.get('search_pos') == 'start':
+            where_statement = (request.args.get('column_to_search') + " LIKE " +
+                               str(request.args.get('keyword')) + "%")
+        if request.args.get('search_pos') == 'mid':
+            where_statement = (request.args.get('column_to_search') + " LIKE " +
+                               "%" + str(request.args.get('keyword')) + "%")
+        if request.args.get('search_pos') == 'end':
+            where_statement = (request.args.get('column_to_search') + " LIKE " +
+                               "%" + str(request.args.get('keyword')))
+        query['filter'] = where_statement
+        response = make_response(redirect('/custom_query'))
+        response.set_cookie('filter', where_statement)
         return response
 
     response = make_response(render_template('custom_query.html', query=query))
