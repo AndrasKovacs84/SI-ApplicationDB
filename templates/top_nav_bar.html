@@ -1,22 +1,16 @@
-<!DOCTYPE>
-<html>
-    <head>
-        {% block head %}
-        <title>{% block title %}{% endblock %} - Codecool</title>
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-        {% endblock %}
-    </head>
+{% extends "base.html" %}
+{% block content %}
     <body>
         <nav>
             <ul>
-                <li class='dropdown'><a href="#">Basic Queries</a>
+                <li class='dropdown'><a href="">Basic Queries</a>
                     <ul class='dropdown-content'>
                         {% for option in basic_menu_options %}
                             <li><a href="/queries/{{ option.query }}">{{ option.option_name }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
-                <li class='dropdown'><a href="#">Advanced Queries</a>
+                <li class='dropdown'><a href="">Advanced Queries</a>
                     <ul class='dropdown-content'>
                         {% for option in adv_menu_options %}
                             <li><a href="/queries/{{ option.query }}">{{ option.option_name }}</a></li>
@@ -25,7 +19,5 @@
                 </li>
             </ul>
         </nav>
-            <div id="content">{% block content %}{% endblock %}</div>
     </body>
-</html>
-
+{% endblock %}

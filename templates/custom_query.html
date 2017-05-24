@@ -1,9 +1,11 @@
-<!DOCTYPE>
-<html>
-    <head>
-        
-    </head>
-    <body>
+{% extends "base.html" %}
+{% block title %}Custom query{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+{% block content %}
+{% include "top_nav_bar.html" %}
         <table>
             <tr>
                 <th>Query attributes</th>
@@ -103,5 +105,4 @@
             <input type="submit" name="submit" value="Submit">
             <button type="button" onclick="location.href='/'" >Back to query index</button>
         </form>
-    </body>
-</html>
+{% endblock %}

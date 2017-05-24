@@ -1,27 +1,27 @@
-<!DOCTYPE>
-<html>
-    <head>
-        
-    </head>
-    <body>
-        <table style="border: 2px solid black">
-            <tr style="border: 2px solid black">
+{% extends "base.html" %}
+{% block title %}Query result{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+{% block content %}
+{% include "top_nav_bar.html" %}
+        <table >
+            <tr>
                 {% for header in query_result[0] %}
-                <th style="border: 2px solid black">
+                <th>
                     {{ header }}
                 </th>
                 {% endfor %}
-            </tr style="border: 2px solid black">
+            </tr>
             {% for row in query_result[1] %}
-                <tr style="border: 2px solid black">
+                <tr>
                     {% for record in row %}
-                        <td style="border: 2px solid black">
+                        <td>
                             {{ record }}
                         </td>
                     {% endfor %}
                 </tr>
             {% endfor %}
-        </table>
-        <button type="button" onclick="location.href='/'" >Back to query index</button>
-    </body>
-</html>
+        </table>  
+{% endblock %}
