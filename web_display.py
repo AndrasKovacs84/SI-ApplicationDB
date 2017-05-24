@@ -20,7 +20,7 @@ adv_menu_options = [{'option_name': 'Mentors and schools', 'query': 'mentors'},
                     {'option_name': 'Contacts (Mentors by country)', 'query': 'mentors_by_country'},
                     {'option_name': 'Contacts', 'query': 'contacts'},
                     {'option_name': 'Applicants page', 'query': 'applicants'},
-                    {'option_name': 'Applicants and mentors', 'query': 'applicants-and-mentors'}]
+                    {'option_name': 'Applicants and mentors', 'query': 'applicants_and_mentors'}]
 
 
 @app.route("/", methods=['GET'])

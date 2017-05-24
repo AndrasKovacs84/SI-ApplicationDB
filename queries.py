@@ -186,40 +186,128 @@ def mentors():
     """On this page you should show the result of a query that returns the name of the mentors
     plus the name and country of the school (joining with the schools table) ordered by the mentors id column 
     (columns: mentors.first_name, mentors.last_name, schools.name, schools.country). """
-    pass
+    data = []
+    cursor.execute("""
+                   SELECT
+                   mentors.first_name AS "First name",
+                   mentors.last_name AS "Last name",
+                   schools.name AS "School's name",
+                   schools.country AS "School's country"
+                   FROM mentors
+                   LEFT JOIN schools ON mentors.city=schools.city
+                   ORDER BY mentors.id;
+                   """)
+    column_names = [desc[0] for desc in cursor.description]
+    rows = cursor.fetchall()
+    data.append(column_names)
+    data.append(rows)
+    return data
 
 
 def all_school():
-    """On this page you should show the result of a query that returns the name of the mentors plus the name 
+    """On this page you should show the result of a query that returns the name of the mentors plus the name
     and country of the school (joining with the schools table) ordered by the mentors id column.
     BUT include all the schools, even if there's no mentor yet!
     columns: mentors.first_name, mentors.last_name, schools.name, schools.country"""
-    pass
+    data = []
+    cursor.execute("""
+                   SELECT
+                   mentors.first_name AS "First name",
+                   mentors.last_name AS "Last name",
+                   schools.name AS "School's name",
+                   schools.country AS "School's country"
+                   FROM mentors
+                   FULL JOIN schools ON mentors.city=schools.city
+                   ORDER BY mentors.id;
+                   """)
+    column_names = [desc[0] for desc in cursor.description]
+    rows = cursor.fetchall()
+    data.append(column_names)
+    data.append(rows)
+    return data
 
 
 def mentors_by_country():
-    """On this page you should show the result of a query that returns the number of the mentors per country 
+    """On this page you should show the result of a query that returns the number of the mentors per country
     ordered by the name of the countries. columns: country, count"""
-    pass
+    data = []
+    cursor.execute("""
+                   SELECT
+                   schools.country AS "Country",
+                   COUNT(mentors) AS "Count"
+                   FROM mentors
+                   LEFT JOIN schools ON schools.city=mentors.city
+                   GROUP BY schools.country
+                   """)
+    column_names = [desc[0] for desc in cursor.description]
+    rows = cursor.fetchall()
+    data.append(column_names)
+    data.append(rows)
+    return data
 
 
 def contacts():
-    """On this page you should show the result of a query that returns the name of the school plus the name of 
+    """On this page you should show the result of a query that returns the name of the school plus the name of
     contact person at the school (from the mentors table) ordered by the name of the school
     columns: schools.name, mentors.first_name, mentors.last_name"""
-    pass
+    data = []
+    cursor.execute("""
+                   SELECT
+                   schools.name AS "School's name",
+                   mentors.first_name AS "First name",
+                   mentors.last_name AS "Last name"
+                   FROM schools
+                   INNER JOIN mentors ON schools.contact_person=mentors.id
+                   ORDER BY schools.name
+                   """)
+    column_names = [desc[0] for desc in cursor.description]
+    rows = cursor.fetchall()
+    data.append(column_names)
+    data.append(rows)
+    return data
 
 
 def applicants():
-    """On this page you should show the result of a query that returns the first name and the code of the applicants plus the creation_date of the application (joining with the applicants_mentors table) ordered by the creation_date in descending order
-    BUT only for applications later than 2016-01-01
+    """On this page you should show the result of a query that returns the first name and the code
+    of the applicants plus the creation_date of the application (joining with the applicants_mentors table)
+    ordered by the creation_date in descending order BUT only for applications later than 2016-01-01
     columns: applicants.first_name, applicants.application_code, applicants_mentors.creation_date"""
-    pass
+    data = []
+    cursor.execute("""
+                   SELECT
+                   applicants.first_name AS "First name",
+                   applicants.application_code AS "Application code",
+                   applicants_mentors.creation_date AS "Creation date"
+                   FROM applicants
+                   RIGHT JOIN applicants_mentors ON applicants_mentors.applicant_id=applicants.id
+                   WHERE applicants_mentors.creation_date > '2016-01-01'
+                   """)
+    column_names = [desc[0] for desc in cursor.description]
+    rows = cursor.fetchall()
+    data.append(column_names)
+    data.append(rows)
+    return data
 
 
 def applicants_and_mentors():
-    """On this page you should show the result of a query that returns the first name and the code of the applicants plus the name of the assigned mentor (joining through the applicants_mentors table) ordered by the applicants id column
-    Show all the applicants, even if they have no assigned mentor in the database!
+    """On this page you should show the result of a query that returns the first name and the code of the applicants
+    plus the name of the assigned mentor (joining through the applicants_mentors table) ordered by
+    the applicants id column. Show all the applicants, even if they have no assigned mentor in the database!
     In this case use the string 'None' instead of the mentor name
     columns: applicants.first_name, applicants.application_code, mentor_first_name, mentor_last_name"""
-    pass
+    data = []
+    cursor.execute("""
+                   SELECT
+                   applicants.first_name AS "Applicant's first name",
+                   applicants.application_code AS "Application code",
+                   mentors.first_name AS "Mentor's first name",
+                   mentors.last_name AS "Mentor's last name"
+                   FROM applicants_mentors
+                   LEFT JOIN mentors ON mentors.id=applicants_mentors.mentor_id
+                   RIGHT JOIN applicants on applicants.id=applicants_mentors.applicant_id
+                   """)
+    column_names = [desc[0] for desc in cursor.description]
+    rows = cursor.fetchall()
+    data.append(column_names)
+    data.append(rows)
+    return data
