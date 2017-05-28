@@ -41,9 +41,14 @@ def index():
 def display_query(query):
     function_to_call = getattr(queries, query)
     query_result = function_to_call()
-    return render_template('list.html', query_result=query_result,
-                           basic_menu_options=basic_menu_options,
-                           adv_menu_options=adv_menu_options)
+    response = make_response(render_template('list.html', query_result=query_result,
+                             basic_menu_options=basic_menu_options,
+                             adv_menu_options=adv_menu_options))
+    response.set_cookie('table', '', expires=0)
+    response.set_cookie('columns', '', expires=0)
+    response.set_cookie('filter', '', expires=0)
+    response.set_cookie('order_by', '', expires=0)
+    return response
 
 
 @app.route("/queries/custom_query", methods=['GET'])
@@ -64,29 +69,29 @@ def custom_query():
                                basic_menu_options=basic_menu_options,
                                adv_menu_options=adv_menu_options)
 
-    if request.args.get('table') is not None:
+    elif request.args.get('table') is not None:
         query['table'] = request.args.get('table')
         response = make_response(redirect('/queries/custom_query'))
         response.set_cookie('table', request.args.get('table'))
         return response
 
-    if request.args.getlist('columns') != []:
+    elif request.args.getlist('columns') != []:
         query['columns'] = ', '.join(request.args.getlist('columns'))
         response = make_response(redirect('/queries/custom_query'))
         response.set_cookie('columns', query['columns'])
         return response
 
-    if request.args.get('column_to_search') is not None:
+    elif request.args.get('column_to_search') is not None:
         if request.args.get('search_pos') == 'start':
             where_statement = (request.args.get('column_to_search') + " LIKE '" +
                                str(request.args.get('keyword')) + "%'")
-        if request.args.get('search_pos') == 'mid':
+        elif request.args.get('search_pos') == 'mid':
             where_statement = (request.args.get('column_to_search') + " LIKE " +
                                "'%" + str(request.args.get('keyword')) + "%'")
-        if request.args.get('search_pos') == 'end':
+        elif request.args.get('search_pos') == 'end':
             where_statement = (request.args.get('column_to_search') + " LIKE " +
                                "'%" + str(request.args.get('keyword')) + "'")
-        if request.args.get('search_pos') == 'exact':
+        elif request.args.get('search_pos') == 'exact':
             where_statement = (request.args.get('column_to_search') + " = " +
                                "'" + str(request.args.get('keyword')) + "'")
         query['filter'] = where_statement
@@ -94,7 +99,7 @@ def custom_query():
         response.set_cookie('filter', where_statement)
         return response
 
-    if request.args.get('column_to_order_by') is not None:
+    elif request.args.get('column_to_order_by') is not None:
         order_by = request.args.get('column_to_order_by')
         if request.args.get('sort_order') == 'asc':
             order_by += ' ASC'
